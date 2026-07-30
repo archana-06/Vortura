@@ -1,0 +1,26 @@
+# Node
+node_modules/
+
+# Python
+python/venv/
+venv/
+__pycache__/
+*.pyc
+
+# Expo
+.expo/
+
+# React Native
+android/
+ios/
+
+# Environment files
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Logs
+*.logVorturaMobile-backup/
+.DS_Store
