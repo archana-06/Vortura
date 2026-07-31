@@ -1,0 +1,7 @@
+{
+  "extension": ["js"],
+  "spec": "selenium-tests/tests/**/*.test.js",
+  "require": ["selenium-tests/hooks/testHooks.js"],
+  "timeout": 45000,
+  "exit": true
+}

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage"
 import AdminLogin from "./pages/AdminLogin"
@@ -21,7 +21,7 @@ function App() {
 
   return (
 
-    <BrowserRouter>
+    <HashRouter>
 
       <Routes>
 
@@ -105,7 +105,7 @@ function App() {
         />
       </Routes>
 
-    </BrowserRouter>
+    </HashRouter>
 
   )
 

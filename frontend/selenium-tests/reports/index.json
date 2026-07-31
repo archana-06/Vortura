@@ -1,0 +1,527 @@
+{
+  "stats": {
+    "suites": 7,
+    "tests": 10,
+    "passes": 10,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-07-31T05:06:22.066Z",
+    "end": "2026-07-31T05:06:27.869Z",
+    "duration": 5803,
+    "testsRegistered": 10,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "c257cedc-d847-4ee1-a5b1-5cc18d492b6d",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "be03541e-f877-4588-a450-12bd6d42418f",
+          "title": "Admin Login Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/admin-login/adminLogin.test.js",
+          "file": "/selenium-tests/tests/admin-login/adminLogin.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Admin Login Smoke Tests\"",
+              "fullTitle": "Admin Login Smoke Tests \"before each\" hook in \"Admin Login Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "adminLoginPage = new AdminLoginPage();",
+              "err": {},
+              "uuid": "aa624fb9-549d-4b23-885d-a9cca3011071",
+              "parentUUID": "be03541e-f877-4588-a450-12bd6d42418f",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "4. Admin login page opens",
+              "fullTitle": "Admin Login Smoke Tests 4. Admin login page opens",
+              "timedOut": false,
+              "duration": 2479,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await adminLoginPage.open();\nconst currentUrl = await adminLoginPage.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/admin-login\");\nconst isLoaded = await adminLoginPage.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "1be2f579-c553-47ea-a4b6-de80006e705a",
+              "parentUUID": "be03541e-f877-4588-a450-12bd6d42418f",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "6. Empty admin login submission shows validation",
+              "fullTitle": "Admin Login Smoke Tests 6. Empty admin login submission shows validation",
+              "timedOut": false,
+              "duration": 1583,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await adminLoginPage.open();\nawait adminLoginPage.clickAccessDashboard();\nconst alertText = await adminLoginPage.getAlertTextAndAccept();\nexpect(alertText).to.not.be.null;\nexpect(alertText.toLowerCase()).to.satisfy(\n  (text) => text.includes(\"invalid\") || text.includes(\"credentials\") || text.includes(\"enter\")\n);",
+              "err": {},
+              "uuid": "53f4f70e-5c46-4d9b-9fda-46a7b8c9d60f",
+              "parentUUID": "be03541e-f877-4588-a450-12bd6d42418f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "1be2f579-c553-47ea-a4b6-de80006e705a",
+            "53f4f70e-5c46-4d9b-9fda-46a7b8c9d60f"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 4062,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "536e1374-a7ba-4e62-9f77-430212317e1f",
+          "title": "Audit Logs Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/audit-logs/auditLogs.test.js",
+          "file": "/selenium-tests/tests/audit-logs/auditLogs.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Audit Logs Smoke Tests\"",
+              "fullTitle": "Audit Logs Smoke Tests \"before each\" hook in \"Audit Logs Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "page = new AuditLogsPage();",
+              "err": {},
+              "uuid": "31c5d12e-fb47-4669-ab89-4bc86c037b3d",
+              "parentUUID": "536e1374-a7ba-4e62-9f77-430212317e1f",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "10. Audit logs route opens",
+              "fullTitle": "Audit Logs Smoke Tests 10. Audit logs route opens",
+              "timedOut": false,
+              "duration": 32,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await page.open();\nconst currentUrl = await page.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/audit-logs\");\nconst isLoaded = await page.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "2ab3dd08-99c9-4364-a586-1ffd2fe5a10f",
+              "parentUUID": "536e1374-a7ba-4e62-9f77-430212317e1f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "2ab3dd08-99c9-4364-a586-1ffd2fe5a10f"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 32,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "17f06d55-cb23-4e56-840f-686d8c39f81b",
+          "title": "Blockchain Ledger Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/blockchain/blockchainLedger.test.js",
+          "file": "/selenium-tests/tests/blockchain/blockchainLedger.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Blockchain Ledger Smoke Tests\"",
+              "fullTitle": "Blockchain Ledger Smoke Tests \"before each\" hook in \"Blockchain Ledger Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "page = new BlockchainLedgerPage();",
+              "err": {},
+              "uuid": "6e436af1-dd3b-4b6c-932b-2ceafc7f2142",
+              "parentUUID": "17f06d55-cb23-4e56-840f-686d8c39f81b",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "9. Blockchain ledger route opens",
+              "fullTitle": "Blockchain Ledger Smoke Tests 9. Blockchain ledger route opens",
+              "timedOut": false,
+              "duration": 16,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await page.open();\nconst currentUrl = await page.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/blockchain\");\nconst isLoaded = await page.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "4401f964-8374-460d-b48a-61a29c13c23a",
+              "parentUUID": "17f06d55-cb23-4e56-840f-686d8c39f81b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "4401f964-8374-460d-b48a-61a29c13c23a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 16,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "3d1bbb84-a6df-438a-af96-e14fc8671e91",
+          "title": "Candidate Management Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/candidate-management/candidateManagement.test.js",
+          "file": "/selenium-tests/tests/candidate-management/candidateManagement.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Candidate Management Smoke Tests\"",
+              "fullTitle": "Candidate Management Smoke Tests \"before each\" hook in \"Candidate Management Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "page = new CandidateManagementPage();",
+              "err": {},
+              "uuid": "3f31d24d-3ef7-423c-b0cc-98d260efc0f4",
+              "parentUUID": "3d1bbb84-a6df-438a-af96-e14fc8671e91",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "7. Candidate management route opens",
+              "fullTitle": "Candidate Management Smoke Tests 7. Candidate management route opens",
+              "timedOut": false,
+              "duration": 18,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await page.open();\nconst currentUrl = await page.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/candidate-management\");\nconst isLoaded = await page.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "6c97a5f9-8028-4392-a8f3-0d119b56dc97",
+              "parentUUID": "3d1bbb84-a6df-438a-af96-e14fc8671e91",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "6c97a5f9-8028-4392-a8f3-0d119b56dc97"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 18,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "42e566bc-26c7-4a7f-8c26-5035bb8cf2bf",
+          "title": "Election Control Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/election-control/electionControl.test.js",
+          "file": "/selenium-tests/tests/election-control/electionControl.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Election Control Smoke Tests\"",
+              "fullTitle": "Election Control Smoke Tests \"before each\" hook in \"Election Control Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "page = new ElectionControlPage();",
+              "err": {},
+              "uuid": "a3d1edb4-b317-4f47-9af3-fc4cb0194dae",
+              "parentUUID": "42e566bc-26c7-4a7f-8c26-5035bb8cf2bf",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "8. Election control route opens",
+              "fullTitle": "Election Control Smoke Tests 8. Election control route opens",
+              "timedOut": false,
+              "duration": 17,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await page.open();\nconst currentUrl = await page.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/election-control\");\nconst isLoaded = await page.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "80e8ba4d-448c-4342-a319-85a1f7942306",
+              "parentUUID": "42e566bc-26c7-4a7f-8c26-5035bb8cf2bf",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "80e8ba4d-448c-4342-a319-85a1f7942306"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 17,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "caeec609-38c4-4508-a09a-9af5e198290e",
+          "title": "Landing Page Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/landing/landing.test.js",
+          "file": "/selenium-tests/tests/landing/landing.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Landing Page Smoke Tests\"",
+              "fullTitle": "Landing Page Smoke Tests \"before each\" hook in \"Landing Page Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "landingPage = new LandingPage();",
+              "err": {},
+              "uuid": "d29c3247-4518-4329-ac2f-d108495fb53c",
+              "parentUUID": "caeec609-38c4-4508-a09a-9af5e198290e",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "1. Landing page loads successfully",
+              "fullTitle": "Landing Page Smoke Tests 1. Landing page loads successfully",
+              "timedOut": false,
+              "duration": 19,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await landingPage.open();\nconst currentUrl = await landingPage.getCurrentUrl();\nexpect(currentUrl).to.include(\"Vortura\");",
+              "err": {},
+              "uuid": "222eaba7-5bdc-48a9-a261-4d45d80b16f7",
+              "parentUUID": "caeec609-38c4-4508-a09a-9af5e198290e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "2. Landing page title or main heading is visible",
+              "fullTitle": "Landing Page Smoke Tests 2. Landing page title or main heading is visible",
+              "timedOut": false,
+              "duration": 32,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await landingPage.open();\nconst isHeadingVisible = await landingPage.isHeadingDisplayed();\nexpect(isHeadingVisible).to.be.true;\nconst headingText = await landingPage.getHeadingText();\nexpect(headingText.toLowerCase()).to.satisfy(\n  (text) => text.includes(\"vortura\") || text.includes(\"secure\") || text.includes(\"voting\")\n);",
+              "err": {},
+              "uuid": "0839b883-f282-448e-9532-0295f74100ea",
+              "parentUUID": "caeec609-38c4-4508-a09a-9af5e198290e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "222eaba7-5bdc-48a9-a261-4d45d80b16f7",
+            "0839b883-f282-448e-9532-0295f74100ea"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 51,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        },
+        {
+          "uuid": "dff42247-ee33-4544-baa3-a857dbd63a0e",
+          "title": "Voter Login Smoke Tests",
+          "fullFile": "/Users/archanam/Documents/PDD/frontend/selenium-tests/tests/voter-login/voterLogin.test.js",
+          "file": "/selenium-tests/tests/voter-login/voterLogin.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before each\" hook in \"Voter Login Smoke Tests\"",
+              "fullTitle": "Voter Login Smoke Tests \"before each\" hook in \"Voter Login Smoke Tests\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "voterLoginPage = new VoterLoginPage();",
+              "err": {},
+              "uuid": "596287e6-c3a4-46e4-b626-97dc7fefee80",
+              "parentUUID": "dff42247-ee33-4544-baa3-a857dbd63a0e",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "3. Voter login page opens",
+              "fullTitle": "Voter Login Smoke Tests 3. Voter login page opens",
+              "timedOut": false,
+              "duration": 22,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await voterLoginPage.open();\nconst currentUrl = await voterLoginPage.getCurrentUrl();\nexpect(currentUrl).to.include(\"#/login\");\nconst isLoaded = await voterLoginPage.isPageLoaded();\nexpect(isLoaded).to.be.true;",
+              "err": {},
+              "uuid": "a7b89e4d-9046-443d-aa01-ed38e101243a",
+              "parentUUID": "dff42247-ee33-4544-baa3-a857dbd63a0e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "5. Empty voter login submission shows validation",
+              "fullTitle": "Voter Login Smoke Tests 5. Empty voter login submission shows validation",
+              "timedOut": false,
+              "duration": 1576,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await voterLoginPage.open();\nawait voterLoginPage.clickSendOtp();\nconst alertText = await voterLoginPage.getAlertTextAndAccept();\nexpect(alertText).to.not.be.null;\nexpect(alertText.toLowerCase()).to.satisfy(\n  (text) => text.includes(\"voter id\") || text.includes(\"email\") || text.includes(\"please enter\") || text.includes(\"inactive\")\n);",
+              "err": {},
+              "uuid": "3cabc9c4-d325-4fb0-8584-02307cafef76",
+              "parentUUID": "dff42247-ee33-4544-baa3-a857dbd63a0e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "a7b89e4d-9046-443d-aa01-ed38e101243a",
+            "3cabc9c4-d325-4fb0-8584-02307cafef76"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1598,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 30000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.7.6"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "index",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "selenium-tests/reports",
+        "reportFilename": "index"
+      },
+      "version": "6.3.2"
+    }
+  }
+}

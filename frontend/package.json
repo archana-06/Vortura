@@ -3,11 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://archana-06.github.io/Vortura",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "test:e2e": "mocha selenium-tests/tests/**/*.test.js",
+    "test:e2e:headed": "HEADLESS=false mocha selenium-tests/tests/**/*.test.js",
+    "test:e2e:chrome": "BROWSER=chrome mocha selenium-tests/tests/**/*.test.js",
+    "test:e2e:firefox": "BROWSER=firefox mocha selenium-tests/tests/**/*.test.js",
+    "test:e2e:edge": "BROWSER=edge mocha selenium-tests/tests/**/*.test.js",
+    "test:e2e:report": "mocha selenium-tests/tests/**/*.test.js --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
@@ -22,12 +31,19 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
+    "chai": "^5.2.0",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "exceljs": "^4.4.0",
+    "gh-pages": "^6.3.0",
     "globals": "^17.6.0",
+    "mocha": "^11.7.6",
+    "mochawesome": "^7.1.3",
     "postcss": "^8.5.14",
+    "selenium-webdriver": "^4.46.0",
     "tailwindcss": "^4.3.0",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "winston": "^3.17.0"
   }
 }
