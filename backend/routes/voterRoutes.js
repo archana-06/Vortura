@@ -373,11 +373,10 @@ router.post("/generate-otp", async (req, res) => {
       sendRealSMS(mobileNumber, otp).catch(err => console.error("SMS async send error:", err))
     }
 
-    console.log(`✅ Generated OTP for ${voterId} (${targetEmail}): ${otp}`)
+    console.log(`✅ Generated real OTP for ${voterId} (${targetEmail}): ${otp}`)
 
     res.json({
-      message: `OTP sent successfully to email: ${targetEmail}! (Please check inbox/spam)`,
-      otp
+      message: `OTP sent successfully to email: ${targetEmail}! Please check your inbox and spam folder.`
     })
   } catch (error) {
     console.error("Generate OTP Error:", error)
@@ -400,9 +399,9 @@ router.post("/verify-otp", async (req, res) => {
     }
 
     const memData = inMemoryOtps.get(voterId)
-    const validOtp = voter?.otpCode || memData?.otpCode || "123456"
+    const validOtp = voter?.otpCode || memData?.otpCode
 
-    if (otp !== validOtp && otp !== "123456") {
+    if (!validOtp || otp !== validOtp) {
       if (mongoose.connection.readyState === 1) {
         await AuditLog.create({
           action: "OTP_FAILED",
@@ -412,7 +411,7 @@ router.post("/verify-otp", async (req, res) => {
         }).catch(() => null)
       }
       return res.status(401).json({
-        message: "Invalid OTP. Please check the code sent to your mobile."
+        message: "Invalid OTP. Please enter the 6-digit code sent to your email address."
       })
     }
 

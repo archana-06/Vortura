@@ -64,7 +64,7 @@ function LoginPage() {
 
       if (response.ok) {
         setOtpSent(true)
-        alert(data.message || `OTP sent to ${trimmedEmail}! Please check your inbox/spam folder. (Test OTP: ${data.otp || ""})`)
+        alert(data.message || `OTP sent successfully to email: ${trimmedEmail}! Please check your inbox and spam folder.`)
       } else {
         setOtpSent(false)
         alert(data.message || "Unable to generate OTP. Please enter correct Voter ID.")
