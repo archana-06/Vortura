@@ -50,47 +50,25 @@ const defaultCandidates = [
 
 let inMemoryCandidates = [...defaultCandidates]
 
-// Reusable Gmail Transporter with pooling for fast connection reuse
-let cachedTransporter = null
-
-const getEmailTransporter = () => {
-  const emailUser = process.env.EMAIL_USER || "vorturaa@gmail.com"
-  const emailPass = process.env.EMAIL_PASS || "djashsgoswurwklj"
-
-  if (emailUser && emailPass) {
-    if (!cachedTransporter) {
-      cachedTransporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        pool: true,
-        connectionTimeout: 5000,
-        auth: {
-          user: emailUser,
-          pass: emailPass
-        }
-      })
-    }
-    return cachedTransporter
-  }
-  return null
-}
-
 // Helper to send real Email OTP via Nodemailer
 const sendEmailOTP = async (recipientEmail, otpCode) => {
   const emailUser = process.env.EMAIL_USER || "vorturaa@gmail.com"
+  const emailPass = process.env.EMAIL_PASS || "djashsgoswurwklj"
 
   if (!recipientEmail || !recipientEmail.includes("@")) {
     return { success: false, error: "Invalid email" }
   }
 
   try {
-    const transporter = getEmailTransporter()
-
-    if (!transporter) {
-      console.log("ℹ️ Email OTP ready. Set EMAIL_USER & EMAIL_PASS in environment.")
-      return { success: true, localOnly: true }
-    }
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: emailUser,
+        pass: emailPass
+      }
+    })
 
     const mailOptions = {
       from: `"Vortura Digital Voting" <${emailUser}>`,
