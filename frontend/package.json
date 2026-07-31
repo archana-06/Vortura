@@ -6,18 +6,19 @@
   "homepage": "https://archana-06.github.io/Vortura",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "VITE_API_BASE_URL=https://vortura-backend.onrender.com vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist",
     "test:e2e": "mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:headed": "HEADLESS=false mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:chrome": "BROWSER=chrome mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:firefox": "BROWSER=firefox mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:edge": "BROWSER=edge mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:report": "mocha selenium-tests/tests/**/*.test.js --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index",
-    "test:e2e:landing": "mocha \"selenium-tests/tests/landing/**/*.test.js\""
+    "test:e2e:landing": "mocha \"selenium-tests/tests/landing/**/*.test.js\"",
+    "test:e2e:voter-login": "mocha \"selenium-tests/tests/voter-login/**/*.test.js\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
