@@ -26,11 +26,11 @@ export async function generateExcelReport() {
 
     sheet.columns = [
       { header: "#", key: "id", width: 6 },
-      { header: "Test Suite", key: "suite", width: 25 },
+      { header: "Test Suite", key: "suite", width: 28 },
       { header: "Test Title", key: "title", width: 45 },
       { header: "Status", key: "status", width: 12 },
       { header: "Duration (ms)", key: "duration", width: 15 },
-      { header: "URL", key: "url", width: 40 },
+      { header: "URL", key: "url", width: 45 },
       { header: "Failure Message", key: "error", width: 50 },
       { header: "Timestamp", key: "timestamp", width: 22 }
     ];
@@ -69,6 +69,13 @@ export async function generateExcelReport() {
           fgColor: { argb: "FEE2E2" }
         };
         statusCell.font = { color: { argb: "991B1B" }, bold: true };
+      } else if (res.status === "SKIPPED") {
+        statusCell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FEF3C7" }
+        };
+        statusCell.font = { color: { argb: "92400E" }, bold: true };
       }
     });
 

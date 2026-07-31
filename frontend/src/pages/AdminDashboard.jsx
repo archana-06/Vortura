@@ -154,41 +154,26 @@ function AdminDashboard() {
         if (endTimeStr.includes("T")) {
           endTimeStr = endTimeStr.split("T")[1]
         }
-        const parts = endTimeStr.split(":")
-        const hours = Number(parts[0] || 18)
-        const minutes = Number(parts[1] || 0)
+        
+        // Parse AM/PM or 24h
+        const isPM = /pm/i.test(endTimeStr)
+        const isAM = /am/i.test(endTimeStr)
+        const cleanEnd = endTimeStr.replace(/(am|pm)/gi, "").trim()
+        const parts = cleanEnd.split(":")
+        let hours = Number(parts[0] || 23)
+        let minutes = Number(parts[1] || 59)
+
+        if (isPM && hours < 12) hours += 12
+        if (isAM && hours === 12) hours = 0
 
         const endDate = new Date()
         endDate.setHours(hours, minutes, 0, 0)
 
-        let startTimeStr = String(electionStatus.startTime || "00:00")
-        if (startTimeStr.includes("T")) {
-          startTimeStr = startTimeStr.split("T")[1]
-        }
-        const startParts = startTimeStr.split(":")
-        const startHours = Number(startParts[0] || 0)
-        const startMinutes = Number(startParts[1] || 0)
-
-        const nowMins = now.getHours() * 60 + now.getMinutes()
-        const endMins = hours * 60 + minutes
-        const startMins = startHours * 60 + startMinutes
-
-        let diff = endDate.getTime() - now.getTime()
-
-        if (startMins > endMins) {
-          // Cross-midnight window e.g. 23:29 to 03:00
-          const isWithinWindow = nowMins >= startMins || nowMins < endMins
-          if (!isWithinWindow) {
-            diff = 0
-          }
-        }
+        const diff = endDate.getTime() - now.getTime()
 
         if (diff <= 0) {
           setRemainingTime("00:00:00")
-          fetch(`${API_BASE_URL}/api/voters/end-election`, { method: "POST" })
-            .then(() => fetchElectionStatus())
-            .catch(() => null)
-          clearInterval(interval)
+          fetchElectionStatus()
           return
         }
 

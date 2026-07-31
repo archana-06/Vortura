@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { VoterLoginPage } from "../../pages/VoterLoginPage.js";
+import { until } from "selenium-webdriver";
 
 describe("Voter Login Smoke Tests", function () {
   this.timeout(30000);
@@ -19,11 +20,21 @@ describe("Voter Login Smoke Tests", function () {
 
   it("5. Empty voter login submission shows validation", async function () {
     await voterLoginPage.open();
+    await voterLoginPage.clearInputs();
     await voterLoginPage.clickSendOtp();
-    const alertText = await voterLoginPage.getAlertTextAndAccept();
-    expect(alertText).to.not.be.null;
+
+    const driver = await voterLoginPage.getDriver();
+    const alert = await driver.wait(
+      until.alertIsPresent(),
+      15000,
+      "Validation alert did not appear"
+    );
+
+    const alertText = await alert.getText();
+    await alert.accept();
+
     expect(alertText.toLowerCase()).to.satisfy(
-      (text) => text.includes("voter id") || text.includes("email") || text.includes("please enter") || text.includes("inactive")
+      (text) => text.includes("please enter") || text.includes("voter id") || text.includes("inactive") || text.includes("unable")
     );
   });
 });

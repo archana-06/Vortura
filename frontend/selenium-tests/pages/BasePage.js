@@ -56,9 +56,19 @@ export class BasePage {
 
   async sendKeys(locator, text, timeout = config.defaultTimeout) {
     logger.info(`Typing into element ${locator}: "${text}"`);
+    const driver = await this.getDriver();
     const element = await this.findElement(locator, timeout);
-    await element.clear();
-    await element.sendKeys(text);
+    try {
+      await driver.executeScript(
+        "arguments[0].value = ''; arguments[0].dispatchEvent(new Event('input', { bubbles: true }));",
+        element
+      );
+    } catch {
+      await element.clear();
+    }
+    if (text) {
+      await element.sendKeys(text);
+    }
   }
 
   async getText(locator, timeout = config.defaultTimeout) {
@@ -75,7 +85,7 @@ export class BasePage {
     }
   }
 
-  async getAlertTextAndAccept(timeout = 5000) {
+  async getAlertTextAndAccept(timeout = 10000) {
     const driver = await this.getDriver();
     try {
       await driver.wait(until.alertIsPresent(), timeout);

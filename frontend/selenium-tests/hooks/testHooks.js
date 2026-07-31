@@ -29,7 +29,17 @@ export const mochaHooks = {
       }
     }
 
-    if (currentTest && currentTest.state === "failed") {
+    if (currentTest && currentTest.isPending && currentTest.isPending()) {
+      logger.warn(`SKIPPED TEST: ${currentTest.title}`);
+      recordTestResult({
+        suite: currentTest.parent?.title || "Default Suite",
+        title: currentTest.title,
+        status: "SKIPPED",
+        duration: 0,
+        url: currentUrl,
+        error: "Skipped (API dependent test disabled)"
+      });
+    } else if (currentTest && currentTest.state === "failed") {
       failureMsg = currentTest.err ? currentTest.err.message : "Unknown Error";
       logger.error(`FAILED TEST: ${currentTest.title} - ${failureMsg}`);
 

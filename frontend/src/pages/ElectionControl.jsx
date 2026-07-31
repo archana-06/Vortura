@@ -71,14 +71,28 @@ function ElectionControl() {
 
   const startElection = async () => {
     const today = new Date().toISOString().split("T")[0]
-    const formattedStart = `${today}T${startTime}`
-    const formattedEnd = `${today}T${endTime}`
+    let start = startTime
+    let end = endTime
 
-    setElectionStatus(prev => ({
-      ...prev,
+    if (!start || start === "00:00") {
+      const now = new Date()
+      start = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
+    }
+    if (!end || end === "00:00" || end === start) {
+      end = "23:59"
+    }
+
+    const formattedStart = `${today}T${start}`
+    const formattedEnd = `${today}T${end}`
+
+    const activeState = {
       isActive: true,
-      statusText: "ACTIVE"
-    }))
+      statusText: "ACTIVE",
+      startTime: formattedStart,
+      endTime: formattedEnd
+    }
+
+    setElectionStatus(activeState)
 
     try {
       const response = await fetch(
@@ -97,14 +111,20 @@ function ElectionControl() {
 
       const data = await response.json()
 
-      localStorage.setItem("electionStartTime", startTime)
-      localStorage.setItem("electionEndTime", endTime)
+      localStorage.setItem("electionStartTime", start)
+      localStorage.setItem("electionEndTime", end)
+
+      if (data.election) {
+        setElectionStatus(data.election)
+      } else {
+        setElectionStatus(activeState)
+      }
 
       setResultsLocked(true)
-      alert(data.message || "Election Started")
-      fetchElectionStatus()
+      alert(data.message || "Election session started cleanly! Historical audit logs, votes, and fraud counts reset to 0.")
     } catch (error) {
       console.log(error)
+      alert("Error starting election: " + error.message)
     }
   }
 
