@@ -73,7 +73,7 @@ const sendEmailOTP = async (recipientEmail, otpCode) => {
     const mailOptions = {
       from: `"Vortura Digital Voting" <${emailUser}>`,
       to: recipientEmail,
-      subject: "Vortura Digital Voting - Your Login OTP Code",
+      subject: `Vortura Digital Voting - Login OTP [${otpCode}] - ${new Date().toLocaleTimeString("en-US")}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
           <h2 style="color: #2563eb; margin-bottom: 8px;">🗳️ Vortura Secure Voting</h2>
@@ -338,15 +338,8 @@ router.post("/generate-otp", async (req, res) => {
       expires: Date.now() + 5 * 60 * 1000
     })
 
-    // Send Real Email OTP asynchronously so response is instant (<100ms)
-    sendEmailOTP(targetEmail, otp).then(emailResult => {
-      if (emailResult.success) {
-        console.log(`✅ Email OTP delivered to ${targetEmail}`)
-      } else {
-        console.warn(`⚠️ Email OTP delivery warning for ${targetEmail}:`, emailResult.error)
-      }
-    }).catch(err => console.error("Email OTP async send error:", err))
-
+    // Send Real Email OTP
+    const emailResult = await sendEmailOTP(targetEmail, otp)
     if (mobileNumber && !mobileNumber.includes("@")) {
       sendRealSMS(mobileNumber, otp).catch(err => console.error("SMS async send error:", err))
     }
@@ -354,7 +347,9 @@ router.post("/generate-otp", async (req, res) => {
     console.log(`✅ Generated real OTP for ${voterId} (${targetEmail}): ${otp}`)
 
     res.json({
-      message: `OTP sent successfully to email: ${targetEmail}! Please check your inbox and spam folder.`
+      message: emailResult.success
+        ? `OTP sent successfully to email: ${targetEmail}! Please check your inbox.`
+        : `OTP generated successfully for ${voterId}. (Email delivery attempted to ${targetEmail})`
     })
   } catch (error) {
     console.error("Generate OTP Error:", error)
