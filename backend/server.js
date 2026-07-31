@@ -13,7 +13,24 @@ connectDB()
 
 const app = express()
 
-app.use(cors())
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://archana-06.github.io",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allows requests without an origin, such as Postman and Selenium API calls
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 
 app.use(
   express.json({
@@ -52,11 +69,16 @@ app.use(
 app.get("/", (req, res) => {
   res.send("Vortura Backend Running")
 })
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Vortura backend is running",
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-  console.log(
-    `Server running on port ${PORT}`
-  )
-})
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
