@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
+import API_BASE_URL from "../config/api"
 
 const surveyedLocations = [
   {
@@ -78,7 +79,7 @@ function GeoLocationPage() {
     const fetchLocationInfo = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/voters/location-info/${activeVoterId}`
+          `${API_BASE_URL}/api/voters/location-info/${activeVoterId}`
         )
 
         const data = await response.json()
@@ -161,7 +162,7 @@ function GeoLocationPage() {
   const handleSaveLocationUpdate = async () => {
     setIsUpdatingLocation(true)
     try {
-      const response = await fetch("http://localhost:8000/api/voters/update-location", {
+      const response = await fetch(`${API_BASE_URL}/api/voters/update-location`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -206,7 +207,7 @@ function GeoLocationPage() {
     setVerificationResult(null)
 
     try {
-      const response = await fetch("http://localhost:8000/api/voters/verify-geolocation", {
+      const response = await fetch(`${API_BASE_URL}/api/voters/verify-geolocation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

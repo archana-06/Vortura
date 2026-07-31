@@ -3,6 +3,8 @@ import React, {
   useEffect
 } from "react"
 import { Link } from "react-router-dom"
+import API_BASE_URL from "../config/api"
+
 function CandidateManagement() {
 
   const [candidates, setCandidates] =
@@ -27,7 +29,7 @@ const [symbol, setSymbol] =
 
   const syncCandidatesWithBackend = async (list) => {
     try {
-      await fetch("http://localhost:8000/api/voters/candidates/sync", {
+      await fetch(`${API_BASE_URL}/api/voters/candidates/sync`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ candidates: list }),

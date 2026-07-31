@@ -1,6 +1,8 @@
 import React from "react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import API_BASE_URL from "../config/api"
+
 function AuditLogs() {
     const [logs, setLogs] = useState([])
 
@@ -9,7 +11,7 @@ function AuditLogs() {
     try {
 
         const response = await fetch(
-        "http://localhost:8000/api/voters/audit-logs"
+        `${API_BASE_URL}/api/voters/audit-logs`
         )
 
         const data = await response.json()

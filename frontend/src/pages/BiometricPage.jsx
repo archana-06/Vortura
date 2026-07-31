@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import API_BASE_URL from "../config/api"
 
 function BiometricPage() {
   const navigate = useNavigate()
@@ -41,7 +42,7 @@ function BiometricPage() {
 
     async function fetchVoterFaceImages() {
       try {
-        const response = await fetch(`http://localhost:8000/api/face-images/voter/${activeVoterId}`)
+        const response = await fetch(`${API_BASE_URL}/api/face-images/voter/${activeVoterId}`)
         if (response.ok) {
           const data = await response.json()
           if (data.images && data.images.length > 0) {
@@ -261,7 +262,7 @@ function BiometricPage() {
       }
 
       const backendResponse = await fetch(
-        "http://localhost:8000/api/voters/verify-face",
+        `${API_BASE_URL}/api/voters/verify-face`,
         {
           method: "POST",
           headers: {

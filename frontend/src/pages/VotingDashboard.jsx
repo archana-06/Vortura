@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import API_BASE_URL from "../config/api"
 
 function VotingDashboard() {
   const navigate = useNavigate()
@@ -8,7 +9,7 @@ function VotingDashboard() {
 
   const fetchStatus = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/voters/election-status")
+      const res = await fetch(`${API_BASE_URL}/api/voters/election-status`)
       if (res.ok) {
         const data = await res.json()
         setElectionStatus(data)
@@ -43,7 +44,7 @@ function VotingDashboard() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/cast-vote",
+        `${API_BASE_URL}/api/voters/cast-vote`,
         {
           method: "POST",
           headers: {

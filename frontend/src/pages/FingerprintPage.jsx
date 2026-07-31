@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"
+import API_BASE_URL from "../config/api"
 
 function FingerprintPage() {
   const navigate = useNavigate()
@@ -7,7 +8,7 @@ function FingerprintPage() {
   const verifyFingerprint = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/verify-fingerprint",
+        `${API_BASE_URL}/api/voters/verify-fingerprint`,
         {
           method: "POST",
           headers: {

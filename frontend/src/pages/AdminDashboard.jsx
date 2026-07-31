@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import API_BASE_URL from "../config/api"
 
 function AdminDashboard() {
 
@@ -35,7 +36,7 @@ function AdminDashboard() {
   // FETCH DASHBOARD STATS
   const fetchDashboardStats = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/voters/dashboard-stats")
+      const response = await fetch(`${API_BASE_URL}/api/voters/dashboard-stats`)
       if (!response.ok) return
       const data = await response.json()
       setStats(data)
@@ -51,7 +52,7 @@ function AdminDashboard() {
   // FETCH RESULTS
   const fetchResults = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/voters/results")
+      const response = await fetch(`${API_BASE_URL}/api/voters/results`)
       if (!response.ok) return
       const data = await response.json()
       setResults(data.results || [])
@@ -63,7 +64,7 @@ function AdminDashboard() {
   // FETCH ELECTION STATUS
   const fetchElectionStatus = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/voters/election-status")
+      const response = await fetch(`${API_BASE_URL}/api/voters/election-status`)
       if (!response.ok) return
       const data = await response.json()
       setElectionStatus(data)
@@ -75,7 +76,7 @@ function AdminDashboard() {
   // FETCH AUDIT LOGS
   const fetchAuditLogs = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/voters/audit-logs")
+      const response = await fetch(`${API_BASE_URL}/api/voters/audit-logs`)
       if (!response.ok) return
       const data = await response.json()
       const logs = data.logs || []
@@ -88,7 +89,7 @@ function AdminDashboard() {
   // FETCH BLOCKCHAIN
   const fetchBlockchain = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/voters/blockchain-ledger")
+      const response = await fetch(`${API_BASE_URL}/api/voters/blockchain-ledger`)
       if (!response.ok) return
       const data = await response.json()
       setLedger(data.votes || [])
@@ -99,7 +100,7 @@ function AdminDashboard() {
 
   const endElection = async () => {
     try {
-      const endResponse = await fetch("http://localhost:8000/api/voters/end-election", { method: "POST" })
+      const endResponse = await fetch(`${API_BASE_URL}/api/voters/end-election`, { method: "POST" })
       const endData = await endResponse.json()
       alert("Election Status: " + (endData.message || "Election Ended"))
       fetchElectionStatus()
@@ -184,7 +185,7 @@ function AdminDashboard() {
 
         if (diff <= 0) {
           setRemainingTime("00:00:00")
-          fetch("http://localhost:8000/api/voters/end-election", { method: "POST" })
+          fetch(`${API_BASE_URL}/api/voters/end-election`, { method: "POST" })
             .then(() => fetchElectionStatus())
             .catch(() => null)
           clearInterval(interval)

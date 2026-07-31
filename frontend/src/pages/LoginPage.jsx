@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import API_BASE_URL from "../config/api"
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -13,7 +14,7 @@ function LoginPage() {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/voters/election-status")
+        const res = await fetch(`${API_BASE_URL}/api/voters/election-status`)
         if (res.ok) {
           const data = await res.json()
           setElectionStatus(data)
@@ -30,7 +31,7 @@ function LoginPage() {
 
   const sendOTP = async () => {
     try {
-      const statusRes = await fetch("http://localhost:8000/api/voters/election-status")
+      const statusRes = await fetch(`${API_BASE_URL}/api/voters/election-status`)
       if (statusRes.ok) {
         const latestStatus = await statusRes.json()
         setElectionStatus(latestStatus)
@@ -60,7 +61,7 @@ function LoginPage() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/generate-otp",
+        `${API_BASE_URL}/api/voters/generate-otp`,
         {
           method: "POST",
           headers: {
@@ -84,7 +85,7 @@ function LoginPage() {
       }
     } catch (error) {
       console.error("sendOTP Error:", error)
-      alert("Unable to connect to backend server at http://localhost:8000. Please make sure the backend server is running.")
+      alert(`Unable to connect to backend server at ${API_BASE_URL}. Please try again.`)
     }
   }
 const verifyOTP = async () => {
@@ -92,7 +93,7 @@ const verifyOTP = async () => {
 
   try {
     const response = await fetch(
-      "http://localhost:8000/api/voters/verify-otp",
+      `${API_BASE_URL}/api/voters/verify-otp`,
       {
         method: "POST",
         headers: {

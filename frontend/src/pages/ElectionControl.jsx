@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import API_BASE_URL from "../config/api"
 
 function ElectionControl() {
   const [electionStatus, setElectionStatus] = useState(null)
@@ -57,7 +58,7 @@ function ElectionControl() {
   const fetchElectionStatus = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/election-status"
+        `${API_BASE_URL}/api/voters/election-status`
       )
 
       const data = await response.json()
@@ -81,7 +82,7 @@ function ElectionControl() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/start-election",
+        `${API_BASE_URL}/api/voters/start-election`,
         {
           method: "POST",
           headers: {
@@ -120,7 +121,7 @@ function ElectionControl() {
     try {
       const today = new Date().toISOString().split("T")[0]
       const response = await fetch(
-        `http://localhost:8000/api/voters/${endpoint}`,
+        `${API_BASE_URL}/api/voters/${endpoint}`,
         {
           method: "POST",
           headers: {
@@ -151,7 +152,7 @@ function ElectionControl() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/end-election",
+        `${API_BASE_URL}/api/voters/end-election`,
         {
           method: "POST",
         }
@@ -169,7 +170,7 @@ function ElectionControl() {
   const publishResults = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/voters/publish-results",
+        `${API_BASE_URL}/api/voters/publish-results`,
         {
           method: "POST",
         }

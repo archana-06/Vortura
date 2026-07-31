@@ -1,6 +1,8 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
+import API_BASE_URL from "../config/api"
+
 function BlockchainLedger() {
     const [ledger, setLedger] = useState([])
 
@@ -36,7 +38,7 @@ const fetchLedger = async () => {
   try {
 
     const response = await fetch(
-      "http://localhost:8000/api/voters/blockchain-ledger"
+      `${API_BASE_URL}/api/voters/blockchain-ledger`
     )
 
     const data = await response.json()

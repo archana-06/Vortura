@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import LocationPicker from "../components/LocationPicker"
+import API_BASE_URL from "../config/api"
 
 function FaceRegistration() {
     const navigate = useNavigate()
@@ -65,7 +66,7 @@ function FaceRegistration() {
 
             // STEP 1: Upload face images
             const faceResponse = await fetch(
-                `http://localhost:8000/api/face-images/upload/${voterId.trim()}`,
+                `${API_BASE_URL}/api/face-images/upload/${voterId.trim()}`,
                 {
                     method: "POST",
                     body: formData,
@@ -80,7 +81,7 @@ function FaceRegistration() {
 
             // STEP 2: Save marked location to MongoDB
             const locationResponse = await fetch(
-                "http://localhost:8000/api/voters/update-location",
+                `${API_BASE_URL}/api/voters/update-location`,
                 {
                     method: "POST",
                     headers: {

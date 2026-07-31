@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
+import API_BASE_URL from "../config/api"
 
 function ResultsManagement() {
 
@@ -19,7 +20,7 @@ const [adminPassword, setAdminPassword] = useState("")
     try {
 
       const response = await fetch(
-        "http://localhost:8000/api/voters/results"
+        `${API_BASE_URL}/api/voters/results`
       )
 
       const data = await response.json()
