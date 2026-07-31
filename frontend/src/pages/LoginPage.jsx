@@ -30,20 +30,6 @@ function LoginPage() {
   }, [])
 
   const sendOTP = async () => {
-    try {
-      const statusRes = await fetch(`${API_BASE_URL}/api/voters/election-status`)
-      if (statusRes.ok) {
-        const latestStatus = await statusRes.json()
-        setElectionStatus(latestStatus)
-        if (latestStatus.isActive === false) {
-          alert("Election is currently inactive or closed. OTP generation and voter login are disabled until an admin starts the election.")
-          return
-        }
-      }
-    } catch (e) {
-      console.warn("Pre-OTP status check failed:", e)
-    }
-
     const trimmedVoterId = voterId.trim().toUpperCase()
     const trimmedEmail = email.trim()
 
@@ -78,7 +64,7 @@ function LoginPage() {
 
       if (response.ok) {
         setOtpSent(true)
-        alert("OTP generated successfully")
+        alert(data.message || `OTP sent to ${trimmedEmail}! Please check your inbox/spam folder. (Test OTP: ${data.otp || ""})`)
       } else {
         setOtpSent(false)
         alert(data.message || "Unable to generate OTP. Please enter correct Voter ID.")
@@ -211,10 +197,9 @@ const verifyOTP = async () => {
             {/* OTP Button */}
             <button
               onClick={sendOTP}
-              disabled={electionStatus && electionStatus.isActive === false}
               className={`w-full py-4 rounded-2xl font-semibold text-lg shadow-lg transition ${
                 electionStatus && electionStatus.isActive === false
-                  ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                  ? "bg-slate-400 text-white cursor-pointer"
                   : "bg-gradient-to-r from-blue-600 to-emerald-500 text-white hover:scale-[1.02]"
               }`}
             >

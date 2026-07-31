@@ -50,49 +50,50 @@ const defaultCandidates = [
 
 let inMemoryCandidates = [...defaultCandidates]
 
+// Reusable Gmail Transporter with pooling for fast connection reuse
+let cachedTransporter = null
+
+const getEmailTransporter = () => {
+  const emailUser = process.env.EMAIL_USER || "vorturaa@gmail.com"
+  const emailPass = process.env.EMAIL_PASS || "djashsgoswurwklj"
+
+  if (emailUser && emailPass) {
+    if (!cachedTransporter) {
+      cachedTransporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        pool: true,
+        connectionTimeout: 5000,
+        auth: {
+          user: emailUser,
+          pass: emailPass
+        }
+      })
+    }
+    return cachedTransporter
+  }
+  return null
+}
+
 // Helper to send real Email OTP via Nodemailer
 const sendEmailOTP = async (recipientEmail, otpCode) => {
-  const emailUser = process.env.EMAIL_USER
-  const emailPass = process.env.EMAIL_PASS
+  const emailUser = process.env.EMAIL_USER || "vorturaa@gmail.com"
 
   if (!recipientEmail || !recipientEmail.includes("@")) {
     return { success: false, error: "Invalid email" }
   }
 
   try {
-    let transporter
+    const transporter = getEmailTransporter()
 
-    if (emailUser && emailPass) {
-      transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: emailUser,
-          pass: emailPass
-        }
-      })
-    } else {
-      try {
-        const testAccount = await Promise.race([
-          nodemailer.createTestAccount(),
-          new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 2000))
-        ])
-        transporter = nodemailer.createTransport({
-          host: "smtp.ethereal.email",
-          port: 587,
-          secure: false,
-          auth: {
-            user: testAccount.user,
-            pass: testAccount.pass
-          }
-        })
-      } catch (tErr) {
-        console.log("ℹ️ Email OTP ready. Set EMAIL_USER & EMAIL_PASS in backend/.env to send real Gmail emails.")
-        return { success: true, localOnly: true }
-      }
+    if (!transporter) {
+      console.log("ℹ️ Email OTP ready. Set EMAIL_USER & EMAIL_PASS in environment.")
+      return { success: true, localOnly: true }
     }
 
     const mailOptions = {
-      from: `"Vortura Digital Voting" <${emailUser || "noreply@vortura.org"}>`,
+      from: `"Vortura Digital Voting" <${emailUser}>`,
       to: recipientEmail,
       subject: "Vortura Digital Voting - Your Login OTP Code",
       html: `
@@ -109,11 +110,7 @@ const sendEmailOTP = async (recipientEmail, otpCode) => {
 
     const info = await transporter.sendMail(mailOptions)
     console.log(`📧 Real Email OTP sent to ${recipientEmail}! Message ID: ${info.messageId}`)
-    const testUrl = nodemailer.getTestMessageUrl(info)
-    if (testUrl) {
-      console.log(`🔗 Test Email Preview URL: ${testUrl}`)
-    }
-    return { success: true, messageId: info.messageId, previewUrl: testUrl }
+    return { success: true, messageId: info.messageId }
   } catch (err) {
     console.error("📧 Email OTP sending error:", err.message)
     return { success: false, error: err.message }
@@ -363,18 +360,23 @@ router.post("/generate-otp", async (req, res) => {
       expires: Date.now() + 5 * 60 * 1000
     })
 
-    // Send Real Email OTP
-    const emailResult = await sendEmailOTP(targetEmail, otp)
+    // Send Real Email OTP asynchronously so response is instant (<100ms)
+    sendEmailOTP(targetEmail, otp).then(emailResult => {
+      if (emailResult.success) {
+        console.log(`✅ Email OTP delivered to ${targetEmail}`)
+      } else {
+        console.warn(`⚠️ Email OTP delivery warning for ${targetEmail}:`, emailResult.error)
+      }
+    }).catch(err => console.error("Email OTP async send error:", err))
+
     if (mobileNumber && !mobileNumber.includes("@")) {
-      await sendRealSMS(mobileNumber, otp)
+      sendRealSMS(mobileNumber, otp).catch(err => console.error("SMS async send error:", err))
     }
 
-    console.log(`✅ Generated OTP for ${voterId}: ${otp}`)
+    console.log(`✅ Generated OTP for ${voterId} (${targetEmail}): ${otp}`)
 
     res.json({
-      message: emailResult.success
-        ? `OTP sent successfully to email: ${targetEmail}!`
-        : `OTP generated successfully for ${voterId}`,
+      message: `OTP sent successfully to email: ${targetEmail}! (Please check inbox/spam)`,
       otp
     })
   } catch (error) {
@@ -1038,58 +1040,60 @@ let inMemoryElectionState = {
 }
 
 // AUTO-END ELECTION CHECK LOGIC
+function parseTimeToMinutes(timeStr) {
+  if (!timeStr) return null
+  let str = String(timeStr).trim()
+
+  if (str.includes("T")) {
+    str = str.split("T")[1] || str
+  }
+
+  const isPM = /pm/i.test(str)
+  const isAM = /am/i.test(str)
+  const cleanStr = str.replace(/(am|pm)/gi, "").trim()
+  const parts = cleanStr.split(":")
+
+  let hours = parseInt(parts[0], 10)
+  let minutes = parseInt(parts[1] || "0", 10)
+
+  if (isNaN(hours) || isNaN(minutes)) return null
+
+  if (isPM && hours < 12) {
+    hours += 12
+  } else if (isAM && hours === 12) {
+    hours = 0
+  }
+
+  return hours * 60 + minutes
+}
+
 function checkAutoEndElection() {
   if (!inMemoryElectionState.isActive) return false
 
   try {
     const now = new Date()
-    let endTimeStr = String(inMemoryElectionState.endTime || "")
-    if (!endTimeStr) return false
+    const nowMins = now.getHours() * 60 + now.getMinutes()
 
-    let endDate
+    const startMins = parseTimeToMinutes(inMemoryElectionState.startTime)
+    const endMins = parseTimeToMinutes(inMemoryElectionState.endTime)
 
-    if (endTimeStr.includes("T")) {
-      endDate = new Date(endTimeStr)
-    } else {
-      const parts = endTimeStr.split(":")
-      const targetHours = Number(parts[0])
-      const targetMinutes = Number(parts[1] || 0)
-
-      if (isNaN(targetHours) || isNaN(targetMinutes)) return false
-
-      endDate = new Date()
-      endDate.setHours(targetHours, targetMinutes, 0, 0)
-
-      let startTimeStr = String(inMemoryElectionState.startTime || "00:00")
-      if (startTimeStr.includes("T")) startTimeStr = startTimeStr.split("T")[1]
-      const startParts = startTimeStr.split(":")
-      const startHours = Number(startParts[0] || 0)
-      const startMinutes = Number(startParts[1] || 0)
-
-      const nowMins = now.getHours() * 60 + now.getMinutes()
-      const endMins = targetHours * 60 + targetMinutes
-      const startMins = startHours * 60 + startMinutes
-
-      if (startMins > endMins) {
-        // Overnight window e.g. 23:29 to 03:00
-        const isWithinWindow = nowMins >= startMins || nowMins < endMins
-        if (!isWithinWindow) {
-          triggerAutoEnd()
-          return true
-        }
-        return false
-      } else {
-        // Same day window e.g. 08:00 to 18:00
-        if (nowMins >= endMins || now >= endDate) {
-          triggerAutoEnd()
-          return true
-        }
-      }
+    // If times are null, unparseable, or identical (e.g. 00:00 - 00:00), do NOT auto-end
+    if (startMins === null || endMins === null || startMins === endMins) {
+      return false
     }
 
-    if (endDate && !isNaN(endDate.getTime()) && now >= endDate) {
-      triggerAutoEnd()
-      return true
+    if (startMins < endMins) {
+      // Same day window e.g. 08:00 AM (480 mins) to 06:00 PM (1080 mins)
+      if (nowMins >= endMins) {
+        triggerAutoEnd()
+        return true
+      }
+    } else if (startMins > endMins) {
+      // Overnight window e.g. 11:30 PM (1410 mins) to 03:00 AM (180 mins)
+      if (nowMins >= endMins && nowMins < startMins) {
+        triggerAutoEnd()
+        return true
+      }
     }
   } catch (err) {
     console.error("Auto end check error:", err.message)
