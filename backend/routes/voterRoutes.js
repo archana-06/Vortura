@@ -402,16 +402,21 @@ router.post("/verify-otp", async (req, res) => {
     const validOtp = voter?.otpCode || memData?.otpCode
 
     if (!validOtp || otp !== validOtp) {
-      if (mongoose.connection.readyState === 1) {
-        await AuditLog.create({
-          action: "OTP_FAILED",
-          voterId: voterId || "UNKNOWN",
-          status: "FAILED",
-          details: `Invalid OTP verification attempt for Voter ID: ${voterId}`
-        }).catch(() => null)
+      console.log(`🚨 Invalid OTP attempt for Voter ID: '${voterId}'. Expected: '${validOtp}', Received: '${otp}'. Logging OTP_FAILED event.`)
+      
+      const logData = {
+        action: "OTP_FAILED",
+        voterId: voterId || "UNKNOWN",
+        status: "FAILED",
+        details: `Invalid OTP verification attempt for Voter ID: ${voterId} (Entered: ${otp})`
       }
+
+      if (mongoose.connection.readyState === 1) {
+        await AuditLog.create(logData).catch(err => console.error("AuditLog save error:", err.message))
+      }
+
       return res.status(401).json({
-        message: "Invalid OTP. Please enter the 6-digit code sent to your email address."
+        message: "Invalid OTP. Please enter the correct 6-digit code sent to your email address."
       })
     }
 
