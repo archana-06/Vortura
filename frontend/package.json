@@ -16,7 +16,8 @@
     "test:e2e:chrome": "BROWSER=chrome mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:firefox": "BROWSER=firefox mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:edge": "BROWSER=edge mocha selenium-tests/tests/**/*.test.js",
-    "test:e2e:report": "mocha selenium-tests/tests/**/*.test.js --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index"
+    "test:e2e:report": "mocha selenium-tests/tests/**/*.test.js --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index",
+    "test:e2e:landing": "mocha \"selenium-tests/tests/landing/**/*.test.js\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
