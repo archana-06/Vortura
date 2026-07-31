@@ -1,0 +1,57 @@
+name: All Quality Engineering Frameworks (Master Orchestrator)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-all-frameworks:
+    name: Execute All Quality Frameworks & Generate Excel Reports
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 1. Execute Selenium Web E2E Suite
+        env:
+          HEADLESS: "true"
+          BROWSER: "chrome"
+          BASE_URL: "https://archana-06.github.io/Vortura"
+        run: |
+          cd frontend
+          npm ci
+          npm run test:e2e:web:report || true
+
+      - name: 2. Execute Appium Mobile E2E Suite
+        run: |
+          cd VorturaMobile
+          npm install
+          npm run test:appium:report || true
+
+      - name: 3. Execute k6 Baseline Load Suite
+        run: |
+          cd load-tests
+          npm install
+          npm run test:load:report || true
+
+      - name: 4. Execute Backend Security Review Suite
+        run: |
+          cd security-tests
+          npm install
+          npm run test:security || true
+
+      - name: Upload Combined Quality Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: All_Quality_Frameworks_Excel_Reports
+          path: |
+            frontend/selenium-tests/excel/Selenium_E2E_Report.xlsx
+            VorturaMobile/appium-tests/excel/Appium_E2E_Report.xlsx
+            load-tests/excel/K6_Load_Test_Report.xlsx
+            Vulnerability Test Results/

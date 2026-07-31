@@ -18,7 +18,13 @@
     "test:e2e:edge": "BROWSER=edge mocha selenium-tests/tests/**/*.test.js",
     "test:e2e:report": "mocha selenium-tests/tests/**/*.test.js --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index",
     "test:e2e:landing": "mocha \"selenium-tests/tests/landing/**/*.test.js\"",
-    "test:e2e:voter-login": "mocha \"selenium-tests/tests/voter-login/**/*.test.js\""
+    "test:e2e:voter-login": "mocha \"selenium-tests/tests/voter-login/**/*.test.js\"",
+    "test:e2e:web": "mocha \"selenium-tests/tests/**/*.js\"",
+    "test:e2e:web:headed": "HEADLESS=false mocha \"selenium-tests/tests/**/*.js\"",
+    "test:e2e:web:chrome": "BROWSER=chrome mocha \"selenium-tests/tests/**/*.js\"",
+    "test:e2e:web:firefox": "BROWSER=firefox mocha \"selenium-tests/tests/**/*.js\"",
+    "test:e2e:web:edge": "BROWSER=edge mocha \"selenium-tests/tests/**/*.js\"",
+    "test:e2e:web:report": "mocha \"selenium-tests/tests/**/*.js\" --reporter mochawesome --reporter-options reportDir=selenium-tests/reports,reportFilename=index"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",

@@ -1,0 +1,56 @@
+name: k6 Baseline Load Testing Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Target API Base URL'
+        required: false
+        default: 'https://vortura-backend.onrender.com'
+      virtual_users:
+        description: 'Number of Virtual Users (VUs)'
+        required: false
+        default: '100'
+      duration:
+        description: 'Duration (e.g. 1m)'
+        required: false
+        default: '1m'
+
+jobs:
+  k6-load-testing:
+    name: Run k6 Baseline Load Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Load Test Dependencies
+        run: |
+          cd load-tests
+          npm install
+
+      - name: Setup k6 Binary
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run Safe k6 Baseline Test
+        env:
+          K6_TARGET_URL: ${{ inputs.target_url || vars.K6_TARGET_URL || 'https://vortura-backend.onrender.com' }}
+        run: |
+          cd load-tests
+          npm run test:load:report
+
+      - name: Upload k6 Load Report & Excel Workbook
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: K6_Load_Test_Report
+          path: |
+            load-tests/excel/K6_Load_Test_Report.xlsx
+            load-tests/reports/
+            load-tests/logs/

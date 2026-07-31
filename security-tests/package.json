@@ -1,0 +1,11 @@
+{
+  "name": "security-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:security": "node reports/generate-security-reports.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

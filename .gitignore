@@ -24,3 +24,23 @@ ios/
 # Logs
 *.logVorturaMobile-backup/
 .DS_Store
+
+# Environment
+backend/.env
+.env
+*.env
+
+# Selenium reports
+frontend/selenium-tests/reports/
+frontend/selenium-tests/excel/
+
+# Appium reports
+VorturaMobile/appium-tests/reports/
+VorturaMobile/appium-tests/excel/
+
+# Load test reports
+load-tests/reports/
+load-tests/excel/
+
+# Security reports
+Vulnerability Test Results/

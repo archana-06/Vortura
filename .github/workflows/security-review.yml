@@ -1,0 +1,46 @@
+name: Backend Security Review & Vulnerability Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  security-review:
+    name: Run SAST, Dependency & Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository History
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Security Tools Dependencies
+        run: |
+          cd security-tests
+          npm install
+
+      - name: Run Backend Security Audit & Report Generator
+        run: |
+          cd security-tests
+          npm run test:security
+
+      - name: Upload Security Reports & Vulnerability Excel Workbooks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vulnerability_Test_Results
+          path: |
+            Vulnerability Test Results/security-review.md
+            Vulnerability Test Results/executive-summary.md
+            Vulnerability Test Results/dependency-report.md
+            Vulnerability Test Results/endpoint-inventory.xlsx
+            Vulnerability Test Results/findings.xlsx

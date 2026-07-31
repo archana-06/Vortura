@@ -1,0 +1,13 @@
+{
+  "name": "load-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:load": "node scripts/run-load-test.js",
+    "test:load:baseline": "node scripts/run-load-test.js baseline",
+    "test:load:report": "node scripts/generate-excel-report.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
