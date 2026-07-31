@@ -1,0 +1,52 @@
+name: Selenium E2E Automation Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    name: Run Selenium E2E Smoke Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Setup Google Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Execute E2E Tests
+        env:
+          HEADLESS: "true"
+          BROWSER: "chrome"
+          BASE_URL: "https://archana-06.github.io/Vortura"
+        run: |
+          cd frontend
+          npm run test:e2e:report
+
+      - name: Upload Test Reports & Evidence Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-e2e-test-reports
+          path: |
+            frontend/selenium-tests/reports/
+            frontend/selenium-tests/excel/
+            frontend/selenium-tests/screenshots/
+            frontend/selenium-tests/logs/
